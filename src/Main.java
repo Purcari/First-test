@@ -1,4 +1,5 @@
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Main {
     public static boolean isCNPValid(int length) {
@@ -49,6 +50,7 @@ public class Main {
         return sex;
     }
 
+
     public static String getBirthDateFromCnpAsString(String CNP) {
         String dateOfBirth = CNP.substring(1,7);
         String prefix = getYearPrefix(CNP.charAt(0));
@@ -57,11 +59,81 @@ public class Main {
         return dateOfBirth.substring(6,8) + "-" + dateOfBirth.substring(4,6) + "-" + dateOfBirth.substring(0,4);
     }
 
+    public static int CalculateAgeBasedonBirthDate(String BirthDate) {
+        String[]formattedBirthDate = BirthDate.split("-");
+        int dayofBirth = Integer.parseInt(formattedBirthDate[0]);
+        int monthofBirth = Integer.parseInt(formattedBirthDate[1]);
+        int yearofBirth = Integer.parseInt(formattedBirthDate[2]);
+
+        String pattern = "dd-MM-yyy";
+        String currentDate = new SimpleDateFormat(pattern).format(new Date());
+
+        String[] formattedCurrentDate = currentDate.split("-");
+        int currentDay = Integer.parseInt(formattedCurrentDate[0]);
+        int currentMonth = Integer.parseInt(formattedCurrentDate[1]);
+        int currentYear = Integer.parseInt(formattedCurrentDate[2]);
+
+        int age = currentYear - yearofBirth;
+        if (monthofBirth > currentMonth) {
+
+            age -= 1;
+        } else if (monthofBirth == currentMonth) {
+            if (dayofBirth > currentDay) {
+                age -= 1;
+            }
+        }
+        return age;
+    }
+    public static String getCountyBasedonCNP(String CNP) {
+        String county = "";
+        int countyCode = Integer.parseInt(CNP.substring(7,9));
+        switch (countyCode) {
+            case 1:
+                county = "Alba";
+                break;
+            case 2:
+                county = "Arad";
+                break;
+            case 3:
+                county = "Arges";
+                break;
+            case 4:
+                county = "Bacau";
+                break;
+            case 5:
+                county = "Bihor";
+            break;
+            default:
+                county = "Invalid";
+                break;
+        }
+        return county;
+
+
+
+        }
+
+
+
 
 
     public static void main(String[] args) {
         String CNP = "2931111050098";
+
+
+        System.out.println(CNP);
+        System.out.println(returnSexOfPerson('2'));
         System.out.println(getBirthDateFromCnpAsString(CNP));
+        System.out.println(CalculateAgeBasedonBirthDate(getBirthDateFromCnpAsString(CNP)));
+        System.out.println(getCountyBasedonCNP(CNP));
+
+
+
+
+
+    }
+
+}
 
 
 
